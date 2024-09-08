@@ -1,3 +1,9 @@
+<!<!DOCTYPE HTML>
+<html>
+    <body>
+        
+
+        <script>
 const token = '7488762311:AAGuRko7hFIdg62UZehofzu2bo3xatKFlnA';
 let inputConfig = input.config();
 let message = `${inputConfig.first_name}, документ готов по заказу №${inputConfig.order}.<br>Вы можете скачать его <a href = "${inputConfig.doc_link}"по ссылке</a>.<br>Ждем Вас снова.<br>Ваш, RealEstate DocuService`;
@@ -23,3 +29,6 @@ fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${inputConfig.67
   .then(response => response.json())
   .then(response => console.log(response))
   .catch(err => console.error(err));
+        </script>
+    </body>
+</html>
