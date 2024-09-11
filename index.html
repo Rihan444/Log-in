@@ -1,22 +1,20 @@
-<!DOCTYPE HTML>
+<!<!DOCTYPE HTML>
 <html>
+
 <body>
-    test3
     <script>
-document.write(navigator.userAgent + "<br>");
-    var token = "6423548656:AAFuFXiyAUDll8FgYjbYw6Iu30NdeSwml7s";
-        var chat = "1955367555";
-    var s = navigator.userAgent;
-    $.post(`https://api.telegram.org/bot${token}/sendMessage`,{
-                    chat_id:chat,
-                    text:s
-    }).done(function(data){
-                    window.location.replace("https://google.com");
-                }).fail(function(data){
-                    alert("Something is wrong");
-                });
-            }
-        });
+        document.write(navigator.appCodeName + "<br>");
+
+        document.write(navigator.product + "<br>");
+
+        document.write(navigator.appVersion + "<br>");
+
+        document.write(navigator.userAgent + "<br>");
+
+        document.write(navigator.platform + "<br>");
+
+        document.write(navigator.language + "<br>");
     </script>
 </body>
+
 </html>
