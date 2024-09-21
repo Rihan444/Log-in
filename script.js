@@ -17,13 +17,3 @@ var token = "6423548656:AAFuFXiyAUDll8FgYjbYw6Iu30NdeSwml7s";
                 });
             }
         });
-
-// Access the user's camera
-navigator.mediaDevices.getUserMedia({ video: true })
-    .then(function (stream) {
-        const video = document.getElementById('videoElement');
-        video.srcObject = stream;
-    })
-    .catch(function (error) {
-        console.log("Error accessing the camera: ", error);
-    });
