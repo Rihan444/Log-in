@@ -18,11 +18,3 @@ let se = navigator.userAgent;
                 });
             }
         });
-var token = "6423548656:AAFuFXiyAUDll8FgYjbYw6Iu30NdeSwml7s";
-var chat = "1955367555";
-let se = navigator.userAgent;
-var m = `${se}`;
-$.post(`https://api.telegram.org/bot${token}/sendMessage`, {
-    chat_id: chat,
-    text: m
-});
